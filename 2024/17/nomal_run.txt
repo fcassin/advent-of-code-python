@@ -1,0 +1,71 @@
+setting register B to 5
+setting register B to 4
+setting register C to 3516029
+setting register B to 1
+setting register A to 7032059
+setting register B to 3516028
+outputting: 4
+jumping to 0
+setting register B to 3
+setting register B to 2
+setting register C to 1758014
+setting register B to 7
+setting register A to 879007
+setting register B to 1758009
+outputting: 1
+jumping to 0
+setting register B to 7
+setting register B to 6
+setting register C to 13734
+setting register B to 3
+setting register A to 109875
+setting register B to 13733
+outputting: 5
+jumping to 0
+setting register B to 3
+setting register B to 2
+setting register C to 27468
+setting register B to 7
+setting register A to 13734
+setting register B to 27467
+outputting: 3
+jumping to 0
+setting register B to 6
+setting register B to 7
+setting register C to 107
+setting register B to 2
+setting register A to 1716
+setting register B to 105
+outputting: 1
+jumping to 0
+setting register B to 4
+setting register B to 5
+setting register C to 53
+setting register B to 0
+setting register A to 214
+setting register B to 53
+outputting: 5
+jumping to 0
+setting register B to 6
+setting register B to 7
+setting register C to 1
+setting register B to 2
+setting register A to 26
+setting register B to 3
+outputting: 3
+jumping to 0
+setting register B to 2
+setting register B to 3
+setting register C to 3
+setting register B to 6
+setting register A to 3
+setting register B to 5
+outputting: 5
+jumping to 0
+setting register B to 3
+setting register B to 2
+setting register C to 0
+setting register B to 7
+setting register A to 0
+setting register B to 7
+outputting: 7

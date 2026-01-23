@@ -1,0 +1,10 @@
+bin
+lib
+lib64
+venv
+
+pyvenv.cfg
+__pycache__
+*.pyc
+
+**/input.txt
