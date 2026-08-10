@@ -1,17 +1,4 @@
-import sys
-
-sys.path.append("../../")
-
-import collections
 import enum
-import functools
-import graph
-import grid
-import ints
-import itertools
-import letter
-import hashlib
-import screen
 
 TARGET = "input.txt"
 
