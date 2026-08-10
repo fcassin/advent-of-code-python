@@ -1,10 +1,13 @@
+# Ignore tooling
 bin
 lib
 lib64
 venv
 
+# Ignore generated files
 pyvenv.cfg
 __pycache__
 *.pyc
 
+# Ignore input files as requested in Advent of Code guidelines
 **/input.txt
