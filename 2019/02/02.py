@@ -16,7 +16,6 @@ import screen
 TARGET = "input.txt"
 
 
-# TODO: We will probably need to handle instruction length
 class Op(enum.IntEnum):
     ADD = 1
     MUL = 2
@@ -36,7 +35,7 @@ def determine(mem):
             if work_mem[0] == 19690720:
                 return noun, verb
 
-    return 0, 0
+    return noun, verb
 
 
 def execute(mem: list[int]) -> list[int]:
@@ -47,12 +46,12 @@ def execute(mem: list[int]) -> list[int]:
         match mem[ip]:
             case Op.ADD:
                 mem[mem[ip + 3]] = mem[mem[ip + 1]] + mem[mem[ip + 2]]
+                ip = ip + 4
             case Op.MUL:
                 mem[mem[ip + 3]] = mem[mem[ip + 1]] * mem[mem[ip + 2]]
+                ip = ip + 4
             case Op.HCF:
                 return mem
-
-        ip = ip + 4
 
     return mem
 
@@ -88,7 +87,6 @@ def part2(input):
 
         mem = [int(code) for code in line.split(",")]
         noun, verb = determine(mem)
-        print(noun, verb)
 
     return noun * 100 + verb
 
