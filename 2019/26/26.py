@@ -6,10 +6,11 @@ import collections
 import functools
 import graph
 import grid
+import hashlib
 import ints
 import itertools
 import letter
-import hashlib
+import math
 import screen
 
 TARGET = "input.txt"

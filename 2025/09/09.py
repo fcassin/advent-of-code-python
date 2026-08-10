@@ -89,7 +89,7 @@ def part1(input):
                 if second[0] < TOP_LEFT[0]:
                     TOP_LEFT = second
             
-            distance = abs(first[0] - second[0]) + abs(first[1] - second[1])
+            distance = grid.manhattan(first, second)
             DISTANCES.append( (distance, x, y) )
     
     DISTANCES = sorted(DISTANCES, key=lambda x: x[0], reverse=True)

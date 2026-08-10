@@ -4,6 +4,7 @@ sys.path.append("../../")
 import collections
 import functools
 import graph
+import grid
 import ints
 import itertools
 import letter
@@ -67,14 +68,14 @@ def visit(instructions):
 
 def part1(input):
     destination = walk(input[0].strip().split(", "))
-        
-    return abs(destination[0]) + abs(destination[1])
+
+    return grid.manhattan(destination)
 
 def part2(input):
     destination = visit(input[0].strip().split(", "))
-    print(destination)  
-        
-    return abs(destination[0]) + abs(destination[1])
+    print(destination)
+
+    return grid.manhattan(destination)
 
 if __name__ == "__main__":
     main()

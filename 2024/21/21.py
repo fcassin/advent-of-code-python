@@ -220,7 +220,7 @@ def distance(start, end):
             if keypad[x][y] == end:
                 end_coord = (x, y)
 
-    return abs(start_coord[0] - end_coord[0]) + abs(start_coord[1] - end_coord[1])
+    return grid.manhattan(start_coord, end_coord)
 
 @functools.cache
 def tie_break(instruction):

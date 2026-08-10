@@ -5,6 +5,15 @@ import png
 
 DIRS = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
+
+def manhattan(a, b=(0, 0)):
+    return abs(a[0] - b[0]) + abs(a[1] - b[1])
+
+
+def add(point, move) -> tuple[int, int]:
+    return (point[0] + move[0], point[1] + move[1])
+
+
 # TODO: Update depth_first_search to match changes in breadth_first_search
 # target should be switched to target_coordinate
 # A mechanism to track shortest paths should be added
@@ -32,10 +41,20 @@ def depth_first_search(grid, valid_func, directions, starting_coordinate, target
 
     return valid_paths
 
+
 def default_directions(path):
     return DIRS
 
-def breadth_first_search(grid, valid_func, dir_func, starting_coordinate, target_coordinate, memoize=True, max_steps=None):
+
+def breadth_first_search(
+    grid,
+    valid_func,
+    dir_func,
+    starting_coordinate,
+    target_coordinate,
+    memoize=True,
+    max_steps=None,
+):
     shortest_paths = {}
     valid_paths = []
 
@@ -45,16 +64,16 @@ def breadth_first_search(grid, valid_func, dir_func, starting_coordinate, target
     while len(paths) > 0:
         path = paths.pop()
         current = path[len(path) - 1]
-        
+
         if current == target_coordinate:
             continue
-        
+
         if memoize:
             if current in shortest_paths:
                 if len(path) > shortest_paths[current]:
                     continue
             shortest_paths[current] = len(path) - 1
-        
+
         if max_steps is not None:
             if len(path) > max_steps:
                 continue
@@ -75,8 +94,9 @@ def breadth_first_search(grid, valid_func, dir_func, starting_coordinate, target
 
     return (valid_paths, shortest_paths)
 
+
 def default_validity_walled_grid(map, current, next):
-    _ = current # Unused in this default implementation
+    _ = current  # Unused in this default implementation
     width = len(map)
     height = len(map[0])
 
@@ -84,8 +104,9 @@ def default_validity_walled_grid(map, current, next):
         if map[next[0]][next[1]] == "#":
             return False
         return True
-        
+
     return False
+
 
 def display(grid):
     cols = len(grid)
@@ -96,6 +117,7 @@ def display(grid):
             print(grid[c][r], end="")
         print()
 
+
 def to_png(grid, name):
     width = len(grid)
     height = len(grid[0])
@@ -104,11 +126,11 @@ def to_png(grid, name):
     for y in range(height):
         row = []
         for x in range(width):
-            if grid[x][y] == '.':
+            if grid[x][y] == ".":
                 row.append(0)
             else:
                 row.append(255)
 
         cols.append(row)
-    
+
     png.from_array(cols, mode="L").save("png/" + name + ".png")
