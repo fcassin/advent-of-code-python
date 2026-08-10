@@ -1,0 +1,27 @@
+[project]
+name = "advent-of-code-python"
+version = "0.1.0"
+requires-python = ">=3.14"
+dependencies = [
+    "pypng",
+    "z3-solver",
+]
+
+[tool.basedpyright]
+pythonVersion = "3.14"
+venvPath = "."
+venv = "venv"
+
+# Solutions live in YYYY/DD/DD.py and reach the shared helpers (graph, grid,
+# ints, letter, screen) via sys.path.append("../../"), which no type checker can
+# follow statically. Adding the repo root here resolves those imports.
+extraPaths = ["."]
+
+# AoC code is throwaway and untyped; "recommended" flags every missing
+# annotation. "standard" keeps real errors without the noise.
+typeCheckingMode = "standard"
+
+exclude = ["venv", "**/__pycache__"]
+
+[tool.ruff]
+exclude = ["venv"]
