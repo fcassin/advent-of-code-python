@@ -12,7 +12,7 @@ def determine(mem):
             work_mem = mem[:]
             work_mem[1] = noun
             work_mem[2] = verb
-            work_mem = intcode.execute(work_mem)
+            work_mem, _ = intcode.execute(work_mem)
 
             if work_mem[0] == 19690720:
                 return noun, verb
@@ -37,7 +37,7 @@ def part1(input):
         mem = [int(code) for code in line.split(",")]
         mem[1] = 12
         mem[2] = 2
-        mem = intcode.execute(mem)
+        mem, _ = intcode.execute(mem)
 
     return mem[0]
 
