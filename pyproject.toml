@@ -7,15 +7,18 @@ dependencies = [
     "z3-solver",
 ]
 
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+# Listed explicitly: flat-layout auto-discovery trips over the year directories.
+[tool.setuptools]
+packages = ["aoc"]
+
 [tool.basedpyright]
 pythonVersion = "3.14"
 venvPath = "."
 venv = "venv"
-
-# Solutions live in YYYY/DD/DD.py and reach the shared helpers (graph, grid,
-# ints, letter, screen) via sys.path.append("../../"), which no type checker can
-# follow statically. Adding the repo root here resolves those imports.
-extraPaths = ["."]
 
 # AoC code is throwaway and untyped; "recommended" flags every missing
 # annotation. "standard" keeps real errors without the noise.

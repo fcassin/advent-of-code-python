@@ -1,15 +1,10 @@
-import sys
-sys.path.append("../../")
-
 import collections
 import functools
-import graph
-import grid
-import ints
 import itertools
 import hashlib
-import letter
-import screen
+
+from aoc import graph, grid, ints, letter, screen
+
 
 def main():
     with open("input.txt", "r") as input_file:

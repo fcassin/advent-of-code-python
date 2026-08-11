@@ -1,15 +1,10 @@
-import sys
-sys.path.append("../../")
-
 import collections
 import functools
-import graph
-import grid
-import ints
 import itertools
-import letter
 import hashlib
-import screen
+
+from aoc import graph, grid, ints, letter, screen
+
 
 MAP = collections.defaultdict(lambda: collections.defaultdict(str))
 DISTANCE_BETWEEN_POINTS = collections.defaultdict(lambda: collections.defaultdict(int))

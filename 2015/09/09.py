@@ -1,9 +1,8 @@
-import sys
-sys.path.append("../../")
-
 import collections
 import hashlib
-import graph
+
+from aoc import graph
+
 
 def main():
     with open("input.txt", "r") as input_file:

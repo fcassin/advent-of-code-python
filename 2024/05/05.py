@@ -1,12 +1,10 @@
-import sys
-sys.path.append("../../")
-
 import collections
 import functools
-import graph
-import letter
 import hashlib
 import re
+
+from aoc import graph, letter
+
 
 def main():
     with open("input.txt", "r") as input_file:

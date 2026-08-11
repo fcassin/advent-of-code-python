@@ -1,16 +1,12 @@
-
-import sys
-sys.path.append("../../")
-
 import collections
 import copy
 import functools
-import graph
-import grid
 import itertools
-import letter
 import hashlib
 import re
+
+from aoc import graph, grid, letter
+
 
 map = collections.defaultdict(lambda:collections.defaultdict(str))
 # right, down, left, up

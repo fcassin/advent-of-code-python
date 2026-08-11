@@ -1,17 +1,11 @@
-import sys
-
-sys.path.append("../../")
-
 import collections
 import functools
-import graph
-import grid
 import hashlib
-import ints
 import itertools
-import letter
 import math
-import screen
+
+from aoc import graph, grid, ints, letter, screen
+
 
 INPUT = "382345-843167"
 

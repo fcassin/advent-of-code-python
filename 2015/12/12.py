@@ -1,13 +1,9 @@
-import sys
-sys.path.append("../../")
-
 import collections
-import graph
-import ints
-import letter
 import hashlib
-
 import json
+
+from aoc import graph, ints, letter
+
 
 def main():
     with open("input.txt", "r") as input_file:
