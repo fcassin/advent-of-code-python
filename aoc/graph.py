@@ -1,6 +1,7 @@
 import collections
 import itertools
 
+
 def _route_cost(route, distances):
     cost = 0
     length = len(route)
@@ -12,6 +13,7 @@ def _route_cost(route, distances):
         cost = cost + distances[current][next]
 
     return cost
+
 
 def _route_cost_no_return(route, distances):
     cost = 0
@@ -26,9 +28,10 @@ def _route_cost_no_return(route, distances):
 
     return cost
 
+
 def travelling_salesman(vertices, edges, origin=None):
     """
-    Travelling salesman is a classic algorithmic problem in the fields of computer 
+    Travelling salesman is a classic algorithmic problem in the fields of computer
     science and operations research.
 
     This implementation finds the shortest possible route that visits each vertex
@@ -47,7 +50,7 @@ def travelling_salesman(vertices, edges, origin=None):
         weights[edge[0]][edge[1]] = edge[2]
         weights[edge[1]][edge[0]] = edge[2]
 
-    distances = [ [0] * len(vertices) for _ in range(len(vertices))]
+    distances = [[0] * len(vertices) for _ in range(len(vertices))]
 
     for i, start in enumerate(vertices):
         for j, stop in enumerate(vertices):
@@ -57,10 +60,10 @@ def travelling_salesman(vertices, edges, origin=None):
 
             distances[i][j] = weights[start][stop]
 
-    min_cost = float('inf')
+    min_cost = float("inf")
     optimal_route = None
     permutations = itertools.permutations(range(len(vertices)))
-    
+
     for permutation in permutations:
         cost = _route_cost(permutation, distances)
 
@@ -70,6 +73,7 @@ def travelling_salesman(vertices, edges, origin=None):
                 optimal_route = permutation
 
     return min_cost, optimal_route
+
 
 """
 Travelling salesman is a classic algorithmic problem in the fields of computer 
@@ -85,6 +89,8 @@ origin: Optional starting vertex
 Example usage may be found in Advent of Code:
 - 2015, Day 9, Part 1
 """
+
+
 def travelling_salesman_no_return(vertices, edges, origin=None):
     weights = collections.defaultdict(lambda: collections.defaultdict(int))
 
@@ -92,7 +98,7 @@ def travelling_salesman_no_return(vertices, edges, origin=None):
         weights[edge[0]][edge[1]] = edge[2]
         weights[edge[1]][edge[0]] = edge[2]
 
-    distances = [ [0] * len(vertices) for _ in range(len(vertices))]
+    distances = [[0] * len(vertices) for _ in range(len(vertices))]
 
     for i, start in enumerate(vertices):
         for j, stop in enumerate(vertices):
@@ -102,10 +108,10 @@ def travelling_salesman_no_return(vertices, edges, origin=None):
 
             distances[i][j] = weights[start][stop]
 
-    min_cost = float('inf')
+    min_cost = float("inf")
     optimal_route = None
     permutations = itertools.permutations(range(len(vertices)))
-    
+
     for permutation in permutations:
         cost = _route_cost_no_return(permutation, distances)
 
@@ -116,6 +122,7 @@ def travelling_salesman_no_return(vertices, edges, origin=None):
 
     return min_cost, optimal_route
 
+
 """
 Travelling showoff is similar to travelling salesman, but instead of minimizing the distance,
 it maximizes it.
@@ -123,6 +130,8 @@ it maximizes it.
 Example usage may be found in Advent of Code:
 - 2015, Day 9, Part 2
 """
+
+
 def travelling_showoff_no_return(vertices, edges):
     weights = collections.defaultdict(lambda: collections.defaultdict(int))
 
@@ -130,7 +139,7 @@ def travelling_showoff_no_return(vertices, edges):
         weights[edge[0]][edge[1]] = edge[2]
         weights[edge[1]][edge[0]] = edge[2]
 
-    distances = [ [0] * len(vertices) for _ in range(len(vertices))]
+    distances = [[0] * len(vertices) for _ in range(len(vertices))]
 
     for i, start in enumerate(vertices):
         for j, stop in enumerate(vertices):
@@ -143,7 +152,7 @@ def travelling_showoff_no_return(vertices, edges):
     max_cost = 0
     optimal_route = None
     permutations = itertools.permutations(range(len(vertices)))
-    
+
     for permutation in permutations:
         cost = _route_cost_no_return(permutation, distances)
 
@@ -152,6 +161,7 @@ def travelling_showoff_no_return(vertices, edges):
             optimal_route = permutation
 
     return max_cost, optimal_route
+
 
 """
 Breadth-First Search (BFS) algorithm implementation.
@@ -163,22 +173,48 @@ state uniqueness, and neighboring states respectively.
 Example usage may be found in Advent of Code:
 - 2016, Day 11
 """
+
+
 def bfs(start, goal_func, hash_func, neighbors_func):
     queue = collections.deque([(start, 0)])
     visited = set()
-    
+
     while queue:
         current, depth = queue.popleft()
-        
+
         state_hash = hash_func(current)
         if state_hash in visited:
             continue
         visited.add(state_hash)
-        
+
         if goal_func(current):
             return depth
-        
+
         for neighbor in neighbors_func(current):
             queue.append((neighbor, depth + 1))
-    
+
+    return -1
+
+
+def breadth_first_search(
+    edges: dict[str, list[tuple[str, int]]], start: str, stop: str
+) -> int:
+    visited = set()
+    considering = collections.deque()
+    considering.append((start, 0))
+
+    while len(considering) > 0:
+        vertice, acc = considering.popleft()
+        if vertice in visited:
+            continue
+
+        visited.add(vertice)
+
+        if vertice == stop:
+            return acc
+
+        for edge in edges[vertice]:
+            dest, cost = edge
+            considering.append((dest, acc + cost))
+
     return -1

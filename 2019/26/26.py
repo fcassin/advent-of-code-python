@@ -4,7 +4,7 @@ import hashlib
 import itertools
 import math
 
-from aoc import graph, grid, ints, letter, screen
+from aoc import graph, grid, intcode, ints, letter, screen
 
 
 TARGET = "input.txt"
