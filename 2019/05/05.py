@@ -1,12 +1,12 @@
 from aoc import intcode
 
 
-TARGET = "example.txt"
+TARGET = "input.txt"
 
 
 def main():
-    # with open(TARGET, "r") as input_file:
-    #    print(part1(input_file.readlines()))
+    with open(TARGET, "r") as input_file:
+        print(part1(input_file.readlines()))
 
     with open(TARGET, "r") as input_file:
         print(part2(input_file.readlines()))
