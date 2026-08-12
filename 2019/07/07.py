@@ -1,10 +1,6 @@
-import collections
-import functools
-import hashlib
 import itertools
-import math
 
-from aoc import graph, grid, intcode, ints, letter, screen
+from aoc import intcode, ints
 
 
 TARGET = "input.txt"
