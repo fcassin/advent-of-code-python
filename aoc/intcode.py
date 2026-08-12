@@ -16,7 +16,9 @@ class Op(enum.IntEnum):
 
 class Signal(enum.IntEnum):
     INP = 1
+    # TODO: Index-based check (ip)
     EOT = 2
+    OOL = 3
     HCF = 99
 
 
@@ -52,7 +54,7 @@ class IntCodeVM:
                 case Op.INP:
                     if len(self.inputs) == 0:
                         yield Signal.INP
-                        # return
+                        return
 
                     value = self.inputs.popleft()
                     self.mem[self.mem[self.ip + 1]] = value
@@ -89,10 +91,10 @@ class IntCodeVM:
                     self.ip = self.ip + 4
                 case Op.HCF:
                     yield Signal.HCF
-                    # return
+                    return
 
-        yield Signal.EOT
-        # return
+        yield Signal.OOL
+        return
 
 
 def parse_modes(literal: str) -> list[int]:

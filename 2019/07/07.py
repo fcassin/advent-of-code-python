@@ -83,23 +83,25 @@ def part2_loop(program, permutations):
     current = 0
     while True:
         for signal in vms[current].run():
-            next = (current + 1) % 5
+            following = (current + 1) % 5
             match signal:
                 case intcode.Signal.EOT:
                     raise Exception("unexpected end of tape")
+                case intcode.Signal.OOL:
+                    raise Exception("unexpected out of loop")
                 case intcode.Signal.HCF:
                     if current == 4:
                         return vms[current].outputs.pop()
                     else:
                         output = vms[current].outputs.pop()
-                        vms[next].input(output)
-                        current = next
+                        vms[following].input(output)
+                        current = following
                         break
 
                 case intcode.Signal.INP:
                     output = vms[current].outputs.pop()
-                    vms[next].input(output)
-                    current = next
+                    vms[following].input(output)
+                    current = following
                     break
 
     return 0
