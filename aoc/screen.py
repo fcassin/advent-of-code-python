@@ -7,6 +7,15 @@ letter_a = """
 #..#.
 """
 
+letter_c = """
+.##..
+#..#.
+#....
+#....
+#..#.
+.##..
+"""
+
 letter_e = """
 ####.
 #....
@@ -32,6 +41,15 @@ letter_h = """
 #..#.
 #..#.
 #..#.
+"""
+
+letter_l = """
+#....
+#....
+#....
+#....
+#....
+####.
 """
 
 letter_o = """
@@ -61,6 +79,16 @@ letter_r = """
 #..#.
 """
 
+letter_u = """
+#..#.
+#..#.
+#..#.
+#..#.
+#..#.
+.##..
+"""
+
+
 letter_y = """
 #...#
 #...#
@@ -70,25 +98,31 @@ letter_y = """
 ..#..
 """
 
+
 def concatenate_letter(letter):
     result = ""
-    
+
     for char in letter:
         if char in ["#", "."]:
             result += char
-            
+
     return result
+
 
 letters = {
     "A": concatenate_letter(letter_a),
+    "C": concatenate_letter(letter_c),
     "E": concatenate_letter(letter_e),
     "G": concatenate_letter(letter_g),
     "H": concatenate_letter(letter_h),
+    "L": concatenate_letter(letter_l),
     "O": concatenate_letter(letter_o),
     "P": concatenate_letter(letter_p),
     "R": concatenate_letter(letter_r),
+    "U": concatenate_letter(letter_u),
     "Y": concatenate_letter(letter_y),
 }
+
 
 def concatenate_letter_from_grid(letter):
     result = []
@@ -98,6 +132,7 @@ def concatenate_letter_from_grid(letter):
             result.append(letter[x][y])
 
     return result
+
 
 def read_letters_from_grid(grid):
     result = ""
@@ -115,8 +150,9 @@ def read_letters_from_grid(grid):
                 found = True
                 result += letter
                 break
-            
+
         if not found:
             result += "?"
 
     return result
+
