@@ -11,6 +11,7 @@ class Op(enum.IntEnum):
     JIF = 6
     SLT = 7
     SEQ = 8
+    RBU = 9
     HCF = 99
 
 
@@ -26,11 +27,14 @@ class IntCodeVM:
     def __init__(self, name):
         self.name = name
         self.ip = 0
+        self.rb = 0
         self.inputs = collections.deque()
         self.outputs = collections.deque()
 
     def memory(self, memory):
-        self.mem = memory
+        self.mem = [0] * 1024 * 1024 * 64
+        for index, value in enumerate(memory):
+            self.mem[index] = value
 
     def input(self, input):
         self.inputs.append(input)
@@ -44,12 +48,14 @@ class IntCodeVM:
 
             match opcode:
                 case Op.ADD:
-                    left, right = binary_parameters(self.mem, self.ip, modes)
-                    self.mem[self.mem[self.ip + 3]] = left + right
+                    left, right = binary_parameters(self.mem, self.ip, self.rb, modes)
+                    target = ternary_target(self.mem, self.ip, self.rb, modes)
+                    self.mem[target] = left + right
                     self.ip = self.ip + 4
                 case Op.MUL:
-                    left, right = binary_parameters(self.mem, self.ip, modes)
-                    self.mem[self.mem[self.ip + 3]] = left * right
+                    left, right = binary_parameters(self.mem, self.ip, self.rb, modes)
+                    target = ternary_target(self.mem, self.ip, self.rb, modes)
+                    self.mem[target] = left * right
                     self.ip = self.ip + 4
                 case Op.INP:
                     if len(self.inputs) == 0:
@@ -57,38 +63,46 @@ class IntCodeVM:
                         return
 
                     value = self.inputs.popleft()
-                    self.mem[self.mem[self.ip + 1]] = value
+
+                    target = unary_target(self.mem, self.ip, self.rb, modes)
+                    self.mem[target] = value
                     self.ip = self.ip + 2
                 case Op.OUT:
-                    value = unary_parameter(self.mem, self.ip, modes)
+                    value = unary_parameter(self.mem, self.ip, self.rb, modes)
                     self.outputs.append(value)
                     self.ip = self.ip + 2
                 case Op.JIT:
-                    left, right = binary_parameters(self.mem, self.ip, modes)
+                    left, right = binary_parameters(self.mem, self.ip, self.rb, modes)
                     if left != 0:
                         self.ip = right
                     else:
                         self.ip = self.ip + 3
                 case Op.JIF:
-                    left, right = binary_parameters(self.mem, self.ip, modes)
+                    left, right = binary_parameters(self.mem, self.ip, self.rb, modes)
                     if left == 0:
                         self.ip = right
                     else:
                         self.ip = self.ip + 3
                 case Op.SLT:
-                    left, right = binary_parameters(self.mem, self.ip, modes)
+                    left, right = binary_parameters(self.mem, self.ip, self.rb, modes)
+                    target = ternary_target(self.mem, self.ip, self.rb, modes)
                     if left < right:
-                        self.mem[self.mem[self.ip + 3]] = 1
+                        self.mem[target] = 1
                     else:
-                        self.mem[self.mem[self.ip + 3]] = 0
+                        self.mem[target] = 0
                     self.ip = self.ip + 4
                 case Op.SEQ:
-                    left, right = binary_parameters(self.mem, self.ip, modes)
+                    left, right = binary_parameters(self.mem, self.ip, self.rb, modes)
+                    target = ternary_target(self.mem, self.ip, self.rb, modes)
                     if left == right:
-                        self.mem[self.mem[self.ip + 3]] = 1
+                        self.mem[target] = 1
                     else:
-                        self.mem[self.mem[self.ip + 3]] = 0
+                        self.mem[target] = 0
                     self.ip = self.ip + 4
+                case Op.RBU:
+                    value = unary_parameter(self.mem, self.ip, self.rb, modes)
+                    self.rb = self.rb + value
+                    self.ip = self.ip + 2
                 case Op.HCF:
                     yield Signal.HCF
                     return
@@ -107,28 +121,50 @@ def parse_modes(literal: str) -> list[int]:
     return modes
 
 
-def unary_parameter(mem: list[int], ip: int, modes: list[int]) -> int:
+def unary_parameter(mem: list[int], ip: int, rb: int, modes: list[int]) -> int:
     if modes[0] == 1:
         return mem[ip + 1]
+    elif modes[0] == 2:
+        return mem[mem[ip + 1] + rb]
     else:
         return mem[mem[ip + 1]]
 
 
-def binary_parameters(mem: list[int], ip: int, modes: list[int]) -> tuple[int, int]:
+def unary_target(mem: list[int], ip: int, rb: int, modes: list[int]) -> int:
+    if modes[0] == 2:
+        return mem[ip + 1] + rb
+    else:
+        return mem[ip + 1]
+
+
+def binary_parameters(
+    mem: list[int], ip: int, rb: int, modes: list[int]
+) -> tuple[int, int]:
     left: int = 0
     right: int = 0
 
     if modes[0] == 1:
         left = mem[ip + 1]
+    elif modes[0] == 2:
+        left = mem[mem[ip + 1] + rb]
     else:
         left = mem[mem[ip + 1]]
 
     if modes[1] == 1:
         right = mem[ip + 2]
+    elif modes[1] == 2:
+        right = mem[mem[ip + 2] + rb]
     else:
         right = mem[mem[ip + 2]]
 
     return left, right
+
+
+def ternary_target(mem: list[int], ip: int, rb: int, modes: list[int]) -> int:
+    if modes[2] == 2:
+        return mem[ip + 3] + rb
+    else:
+        return mem[ip + 3]
 
 
 def execute(
