@@ -3,6 +3,7 @@ import copy
 import itertools
 import png
 
+# RIGHT, DOWN, LEFT, UP
 DIRS = [(1, 0), (0, 1), (-1, 0), (0, -1)]
 
 
@@ -10,7 +11,7 @@ def manhattan(a, b=(0, 0)):
     return abs(a[0] - b[0]) + abs(a[1] - b[1])
 
 
-def add(point, move) -> tuple[int, int]:
+def walk(point, move) -> tuple[int, int]:
     return (point[0] + move[0], point[1] + move[1])
 
 
@@ -106,6 +107,34 @@ def default_validity_walled_grid(map, current, next):
         return True
 
     return False
+
+
+def infinigrid(fill="."):
+    return collections.defaultdict(lambda: collections.defaultdict(lambda: fill))
+
+
+def materialize(
+    infinigrid: collections.defaultdict[int, collections.defaultdict[int, str]],
+    fill=".",
+):
+    xs = [x for x, column in infinigrid.items() if len(column) > 0]
+    ys = [y for column in infinigrid.values() for y in column]
+
+    if len(xs) == 0 or len(ys) == 0:
+        return []
+
+    min_x, max_x = min(xs), max(xs)
+    min_y, max_y = min(ys), max(ys)
+
+    width = max_x - min_x + 1
+    height = max_y - min_y + 1
+
+    grid = [[fill] * height for _ in range(width)]
+    for x, column in infinigrid.items():
+        for y, val in column.items():
+            grid[x - min_x][y - min_y] = val
+
+    return grid
 
 
 def parse(input):

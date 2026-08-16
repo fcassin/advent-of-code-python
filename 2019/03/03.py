@@ -26,7 +26,7 @@ def walk(wire):
         change: tuple[int, int] = DIRS[direction]
 
         for _ in range(distance):
-            location = grid.add(location, change)
+            location = grid.walk(location, change)
             path.add(location)
 
     return path
@@ -44,7 +44,7 @@ def counting_walk(wire):
 
         for _ in range(distance):
             steps = steps + 1
-            location = grid.add(location, change)
+            location = grid.walk(location, change)
             path.add(location)
             if location not in steps_by_loc:
                 steps_by_loc[location] = steps
