@@ -1,10 +1,7 @@
-import collections
-import functools
-import hashlib
 import itertools
 import math
 
-from aoc import graph, grid, intcode, ints, letter, screen
+from aoc import ints
 
 
 TARGET = "input.txt"
@@ -33,10 +30,6 @@ class Moon:
     def energy(self):
         return self.potential() * self.kinetic()
 
-    def __hash__(self) -> int:
-        # Is this shortcut going to work?
-        return self.energy()
-
     def __repr__(self) -> str:
         return self.name
 
@@ -44,33 +37,47 @@ class Moon:
         return f"position=<{self.position[0]:3d},{self.position[1]:3d},{self.position[2]:3d}>, velocity=<{self.velocity[0]:3d},{self.velocity[1]:3d},{self.velocity[2]:3d}>"
 
 
-def part1(input):
+def parse(input):
     names = ["Io", "Europa", "Ganymede", "Callisto"]
     moons = []
 
     for index, line in enumerate(input):
-        velocity = ints.extract(line.strip())
+        position = ints.extract(line.strip())
 
-        moon = Moon(names[index], velocity)
+        moon = Moon(names[index], position)
         moons.append(moon)
 
+    return moons
+
+
+def step(moons):
+    for pair in itertools.combinations(moons, 2):
+        left, right = pair
+
+        for dimension in [0, 1, 2]:
+            if left.position[dimension] < right.position[dimension]:
+                left.velocity[dimension] = left.velocity[dimension] + 1
+                right.velocity[dimension] = right.velocity[dimension] - 1
+            elif left.position[dimension] > right.position[dimension]:
+                left.velocity[dimension] = left.velocity[dimension] - 1
+                right.velocity[dimension] = right.velocity[dimension] + 1
+
+    for moon in moons:
+        for dimension in [0, 1, 2]:
+            moon.position[dimension] = (
+                moon.position[dimension] + moon.velocity[dimension]
+            )
+
+
+def axis(moons, dimension):
+    return tuple((moon.position[dimension], moon.velocity[dimension]) for moon in moons)
+
+
+def part1(input):
+    moons = parse(input)
+
     for _ in range(1000):
-        for pair in itertools.combinations(moons, 2):
-            left, right = pair
-
-            for dimension in [0, 1, 2]:
-                if left.position[dimension] < right.position[dimension]:
-                    left.velocity[dimension] = left.velocity[dimension] + 1
-                    right.velocity[dimension] = right.velocity[dimension] - 1
-                elif left.position[dimension] > right.position[dimension]:
-                    left.velocity[dimension] = left.velocity[dimension] - 1
-                    right.velocity[dimension] = right.velocity[dimension] + 1
-
-        for moon in moons:
-            for dimension in [0, 1, 2]:
-                moon.position[dimension] = (
-                    moon.position[dimension] + moon.velocity[dimension]
-                )
+        step(moons)
 
     system = 0
     for moon in moons:
@@ -79,22 +86,10 @@ def part1(input):
     return system
 
 
-def axis(moons, dimension):
-    return tuple((moon.position[dimension], moon.velocity[dimension]) for moon in moons)
-
-
 def part2(input):
-    names = ["Io", "Europa", "Ganymede", "Callisto"]
-    moons = []
+    moons = parse(input)
 
     cycles = {"x": 0, "y": 0, "z": 0}
-
-    for index, line in enumerate(input):
-        velocity = ints.extract(line.strip())
-
-        moon = Moon(names[index], velocity)
-        moons.append(moon)
-
     initial = [axis(moons, dimension) for dimension in [0, 1, 2]]
 
     for iteration in itertools.count():
@@ -109,22 +104,7 @@ def part2(input):
         if all(cycles.values()):
             break
 
-        for pair in itertools.combinations(moons, 2):
-            left, right = pair
-
-            for dimension in [0, 1, 2]:
-                if left.position[dimension] < right.position[dimension]:
-                    left.velocity[dimension] = left.velocity[dimension] + 1
-                    right.velocity[dimension] = right.velocity[dimension] - 1
-                elif left.position[dimension] > right.position[dimension]:
-                    left.velocity[dimension] = left.velocity[dimension] - 1
-                    right.velocity[dimension] = right.velocity[dimension] + 1
-
-        for moon in moons:
-            for dimension in [0, 1, 2]:
-                moon.position[dimension] = (
-                    moon.position[dimension] + moon.velocity[dimension]
-                )
+        step(moons)
 
     return math.lcm(*cycles.values())
 
