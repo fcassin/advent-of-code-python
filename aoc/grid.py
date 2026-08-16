@@ -108,6 +108,23 @@ def default_validity_walled_grid(map, current, next):
     return False
 
 
+def parse(input):
+    return transpose([list(line.strip()) for line in input])
+
+
+def transpose(grid):
+    rows = len(grid)
+    cols = len(grid[0])
+
+    transposed = [[0] * rows for _ in range(cols)]
+
+    for y in range(rows):
+        for x in range(cols):
+            transposed[x][y] = grid[y][x]
+
+    return transposed
+
+
 def display(grid):
     cols = len(grid)
     rows = len(grid[0])
